@@ -1,14 +1,37 @@
 module Program
 
-    open ArrayTrie
+open ArrayTrie
 
 
-    [<EntryPoint>]
-    let main argv =
-        let stringTrie = Trie.empty |> Trie.insert(['h'; 'e'; 'l'; 'l'; '0']) |> Trie.insert(['h'; 'o'; 'r'; 'l'; 'd']) |> Trie.insert([])
-        let adder = Trie.empty |> Trie.insert([4;6]) |> Trie.insert([5;6;4]) |> Trie.insert([1;2])
-        let adder2 = Trie.empty |> Trie.insert([4;8]) |> Trie.insert([5;7;4]) |> Trie.insert([2;8])
-        let summary = Trie.addNewTrie adder adder2
-        let filterTrie = Trie.leftFold (*) 1 adder
-        printfn "%A" summary
-        0
+[<EntryPoint>]
+let main argv =
+    printfn "use 1"
+
+    let stringTrie =
+        Trie.empty
+        |> Trie.insert ([ 'h'; 'e'; 'l'; 'l'; 'o' ])
+        |> Trie.insert ([ 'w'; 'o'; 'r'; 'l'; 'd' ])
+        |> Trie.insert ([ '!' ])
+        |> Trie.insert ([ 'D'; 'a'; 'n'; 'i'; 'l'; 'a' ])
+        |> Trie.insert ([])
+
+    printfn "%A" stringTrie
+
+    printfn "use 2"
+    let filterTrie = stringTrie |> Trie.filter (fun x -> x.Length = 6)
+    printfn "%A" filterTrie
+
+    printfn "use 3"
+    let mapTrie = stringTrie |> Trie.toMap (fun x -> int (x))
+    printfn "%A" mapTrie
+
+    printfn "use 4"
+    let foldTrie = stringTrie |> Trie.leftFold (+) ' '
+    printfn "%A" foldTrie
+
+    printfn "use 5"
+    let newTrie = Trie.empty |> Trie.insert ([ 'h'; 'i' ])
+    let updateStringTrie = Trie.addNewTrie stringTrie newTrie
+    printfn "%A" updateStringTrie
+    
+    0

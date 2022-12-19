@@ -11,6 +11,7 @@
         <Compile Include="PrefixTree.fs" />
         <Compile Include="UnitTest1.fs" />
         <Compile Include="Program.fs" />
+        <Content Include="README.md" />
     </ItemGroup>
 
     <ItemGroup>
