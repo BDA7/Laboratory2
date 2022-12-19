@@ -60,7 +60,7 @@ type TestClass() =
             btreeChars |> Trie.filter (fun x -> x.Length < 3) |> Trie.getBigSize
 
         assert (filterBtreeInts = 2)
-        assert (filterBtreeChars = 2)
+        assert (filterBtreeChars = 1)
 
     [<Test>]
     member this.``Test Map``() =
