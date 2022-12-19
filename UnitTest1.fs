@@ -16,7 +16,7 @@ let btreeInts =
 let btreeChars =
     Trie.empty
     |> Trie.insert ([ 'a'; 'b'; 'c' ])
-    |> Trie.insert ([ 'a'; 'f' ])
+    |> Trie.insert ([ 'a'; 'f'; 'g' ])
     |> Trie.insert ([ 'b'; 'c'; 'f'; 'g' ])
     |> Trie.insert ([ 'a' ])
 
@@ -27,10 +27,10 @@ type TestClass() =
     member this.``Test create``() =
         let emptyBtree = Trie.empty
         assert ((Trie.getBigSize emptyBtree) = 0)
-        assert ((Trie.getBigSize btreeInts) = 3)
-        assert ((Trie.getSizeAll btreeInts) = 9)
-        assert ((Trie.getBigSize btreeChars) = 3)
-        assert ((Trie.getSizeAll btreeChars) = 10)
+        assert ((Trie.getBigSize btreeInts) = 4)
+        assert ((Trie.getSizeAll btreeInts) = 12)
+        assert ((Trie.getBigSize btreeChars) = 4)
+        assert ((Trie.getSizeAll btreeChars) = 11)
 
     [<Test>]
     member this.``Test Insert delete``() =
