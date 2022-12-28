@@ -2,6 +2,7 @@ module Laboratory2
 
 open ArrayTrie
 open NUnit.Framework
+open FsCheck.NUnit
 
 [<SetUp>]
 let Setup () = ()
@@ -78,16 +79,21 @@ type TestClass() =
         assert (leftFoldBtreeIntsSum = rightFoldBtreeIntsSum)
         assert (leftFoldBtreeIntsSub = rightFoldBtreeIntsSub)
 
-    [<Test>]
-    member this.``Test Neutral Element``() =
-        let newBtreeInts =
-            Trie.empty
-            |> Trie.insert ([ 5; 6; 9 ])
-            |> Trie.insert ([ 4; 7; 8 ])
-            |> Trie.insert ([ 1; 4; 7 ])
-
-        let newBtree = Trie.addNewTrie btreeInts newBtreeInts |> Trie.getBigSize
-        assert (newBtree > Trie.getBigSize newBtreeInts)
-        assert (newBtree > Trie.getBigSize btreeInts)
-        assert (newBtree < ((Trie.getBigSize newBtreeInts) + (Trie.getBigSize btreeInts)))
-        assert (newBtree = ((Trie.getBigSize newBtreeInts) + (Trie.getBigSize btreeInts) - 1))
+    
+    [<Property>]
+    member this.``Test Neutral Element`` (data: (int list[])) =
+        let emptyTrie = Trie.empty
+        let newTrie = Trie.empty |> Trie.addAll data (data.Length-1)
+        let mergedTrie = Trie.addNewTrie emptyTrie newTrie
+        Trie.trieEquals newTrie mergedTrie
+    
+    
+    [<Property>]
+    member this.``Test Associativity``(data1: (int) list, data2: (int) list, data3: (int) list) =
+        let oneTrie = Trie.empty |> Trie.insert data1
+        let twoTrie = Trie.empty |> Trie.insert data2
+        let threeTrie = Trie.empty |> Trie.insert data3
+        let mergedOneTwo = Trie.addNewTrie oneTrie twoTrie
+        let mergedTwoThree = Trie.addNewTrie twoTrie threeTrie
+        Trie.trieEquals (Trie.addNewTrie mergedOneTwo threeTrie) (Trie.addNewTrie mergedTwoThree oneTrie)
+        

@@ -76,7 +76,7 @@ module Trie =
 
         remove [] l
 
-    let rec private addAll (newArr: _[]) num newTrie =
+    let rec addAll (newArr: _[]) num newTrie =
         if (num < 0) then
             newTrie
         else
@@ -126,3 +126,9 @@ module Trie =
             (trieList, init) ||> List.foldBack (fun x acc -> insideRightFold f acc x)
 
         folder
+    
+    let trieEquals (trieOne: Trie<'V>) (trieTwo: Trie<'V>) : bool =
+        let seqOne = trieOne |> toSeq |> Seq.toArray
+        let seqTwo = trieTwo |> toSeq |> Seq.toArray
+        if (seqOne <> seqTwo) then false
+        else true
