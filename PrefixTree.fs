@@ -130,4 +130,4 @@ module Trie =
     let trieEquals (trieOne: Trie<'V>) (trieTwo: Trie<'V>) : bool =
         let seqOne = trieOne |> toSeq |> Seq.toArray
         let seqTwo = trieTwo |> toSeq |> Seq.toArray
-        seqone = seqTwo
+        seqOne = seqTwo
