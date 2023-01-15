@@ -40,6 +40,7 @@ module Trie =
             match Map.tryFind el trie.Children with
             | Some t -> contains els t
             | None -> false
+ 
     let rec toSeq trie =
         seq {
             for KeyValue(label, trie) in trie.Children do
@@ -64,7 +65,7 @@ module Trie =
         size (trieArr.Length - 1) 0
 
     let getBigSize trie =
-        let size = toSeq trie |> Seq.toArray |> Array.length
+        let size = toSeq trie |> Seq.length
         size
 
 
@@ -101,9 +102,15 @@ module Trie =
         newTrie
 
     let filter (f: list<'K> -> bool) trie =
-        let newArr = toSeq trie |> Seq.filter (f) |> Seq.toArray
-        let newTrie = addAll newArr (newArr.Length - 1) empty
-        newTrie
+        let filterElms = toSeq trie |> Seq.filter (f) |> Seq.toList
+        let rec createFilterTrie elements newTrie =
+            match elements with
+            | [] -> newTrie
+            | el::els ->
+                let updateTrie = newTrie |> insert el
+                createFilterTrie els updateTrie
+        createFilterTrie filterElms empty
+        
 
     let private insideLeftFold (f: 'T -> 'V -> 'T) (init: 'T) lst =
         let fold = List.fold (f) init lst
