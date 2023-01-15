@@ -14,6 +14,13 @@ let main argv =
         |> Trie.insert ([ 'D'; 'a'; 'n'; 'i'; 'l'; 'a' ])
         |> Trie.insert ([])
     
+    let btreeInts =
+        Trie.empty
+        |> Trie.insert ([ 1; 4; 7 ])
+        |> Trie.insert ([ 1; 5; 6 ])
+        |> Trie.insert ([ 2; 5 ])
+        |> Trie.insert ([ 5; 150; 625; 1255 ])
+        
     printfn "%A" stringTrie
     
     printfn "use 2"
@@ -25,8 +32,9 @@ let main argv =
     printfn "%A" mapTrie
     
     printfn "use 4"
-    let foldTrie = stringTrie |> Trie.leftFold (+) ' '
-    printfn "%A" foldTrie
+    let foldTrie = (0, btreeInts) ||> Trie.rightFold (fun x acc -> acc - x)
+    let foldTrie2 = btreeInts |> Trie.leftFold (-) 0
+    printfn $"{foldTrie} {foldTrie2}"
     
     printfn "use 5"
     let newTrie = Trie.empty |> Trie.insert ([ 'h'; 'i' ])

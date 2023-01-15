@@ -43,8 +43,8 @@ type TestClass() =
             |> Trie.insert ([ 'a'; '1'; 'g' ])
             |> Trie.insert ([ 'z'; 'h'; 'u'; 'y'; 'z' ])
 
-        let deleteElmBtreeInts = newBtreeInts |> Trie.remove ([ 1; 4; 7 ])
-        let deleteElmBtreeChars = newBtreeChars |> Trie.remove ([ 'a'; 'f'; 'g' ])
+        let deleteElmBtreeInts = newBtreeInts |> Trie.removeFromTrie ([ 1; 4; 7 ])
+        let deleteElmBtreeChars = newBtreeChars |> Trie.removeFromTrie ([ 'a'; 'f'; 'g' ])
 
         assert ((Trie.getBigSize newBtreeInts) > (Trie.getBigSize deleteElmBtreeInts))
         assert ((Trie.getSizeAll newBtreeInts) > (Trie.getSizeAll deleteElmBtreeInts))
@@ -74,10 +74,13 @@ type TestClass() =
     member this.``Test Fold``() =
         let leftFoldBtreeIntsSum = btreeInts |> Trie.leftFold (+) 0
         let rightFoldBtreeIntsSum = btreeInts |> Trie.rightFold (+) 0
-        let leftFoldBtreeIntsSub = btreeInts |> Trie.leftFold (*) 1
-        let rightFoldBtreeIntsSub = btreeInts |> Trie.rightFold (*) 1
-        assert (leftFoldBtreeIntsSum = rightFoldBtreeIntsSum)
+        let leftFoldBtreeIntsSub = btreeInts |> Trie.leftFold (-) 0
+        let rightFoldBtreeIntsSub = btreeInts |> Trie.rightFold (fun x acc -> acc - x) 0
+        let leftFoldBtreeIntsUm = btreeInts |> Trie.leftFold (*) 1
+        let rightFoldBtreeIntsUm = btreeInts |> Trie.rightFold (*) 1
         assert (leftFoldBtreeIntsSub = rightFoldBtreeIntsSub)
+        assert (leftFoldBtreeIntsSum = rightFoldBtreeIntsSum)
+        assert (leftFoldBtreeIntsUm = rightFoldBtreeIntsUm)
 
     
     [<Property>]
