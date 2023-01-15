@@ -37,18 +37,18 @@ type TestClass() =
     member this.``Test Insert delete``() =
         let newBtreeInts =
             btreeInts |> Trie.insert ([ 5; 6; 8 ]) |> Trie.insert ([ 1; 150; 4689 ])
-
+        
         let newBtreeChars =
             btreeChars
             |> Trie.insert ([ 'a'; '1'; 'g' ])
             |> Trie.insert ([ 'z'; 'h'; 'u'; 'y'; 'z' ])
 
-        let deleteElmBtreeInts = newBtreeInts |> Trie.removeFromTrie ([ 1; 4; 7 ])
-        let deleteElmBtreeChars = newBtreeChars |> Trie.removeFromTrie ([ 'a'; 'f'; 'g' ])
-
+        let deleteElmBtreeInts = newBtreeInts |> Trie.removeFromTrie (1)
+        let deleteElmBtreeChars = newBtreeChars |> Trie.removeFromTrie ('a')
+        
         assert ((Trie.getBigSize newBtreeInts) > (Trie.getBigSize deleteElmBtreeInts))
         assert ((Trie.getSizeAll newBtreeInts) > (Trie.getSizeAll deleteElmBtreeInts))
-
+        
         assert ((Trie.getBigSize newBtreeChars) > (Trie.getBigSize deleteElmBtreeChars))
         assert ((Trie.getSizeAll newBtreeChars) > (Trie.getSizeAll deleteElmBtreeChars))
 

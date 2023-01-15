@@ -67,14 +67,6 @@ module Trie =
         let size = toSeq trie |> Seq.toArray |> Array.length
         size
 
-    let rec private removeOneFromList v l =
-        let rec remove acc =
-            function
-            | x :: xs when x = v -> List.rev acc @ xs
-            | x :: xs -> remove (x :: acc) xs
-            | [] -> acc
-
-        remove [] l
 
     let rec addAll (newArr: _[]) num newTrie =
             if (num < 0) then
@@ -85,26 +77,20 @@ module Trie =
                 
               
     let removeFromTrie value (trie: Trie<'T>): Trie<'T>  =
-            let rec castToSeq trie =
-                seq {
-                    for KeyValue(label, trie) in trie.Children do
-                        if trie.IsTerminal then
-                            yield [ label ]
-
-                        let children = castToSeq trie
-
-                        for child in children do
-                            yield label :: child
-                }
-            let values = castToSeq trie |> Seq.toList |> removeOneFromList value
-            let newTrie = addAll (List.toArray values) (values.Length-1) empty
-            newTrie
+        let el = Map.remove value trie.Children
+        let newTrie = {empty with Children = el}
+        newTrie
             
 
     let addNewTrie firstTrie twoTrie =
-        let trieSeq = toSeq twoTrie |> Seq.toArray
-        let summaryTrie = addAll trieSeq (trieSeq.Length - 1) firstTrie
-        summaryTrie
+        let values = toSeq twoTrie |> Seq.toList
+        let rec merge myList newTrie =
+            match myList with
+            | [] -> newTrie
+            | el :: els ->
+                let updateTrie = newTrie |> insert el
+                merge els updateTrie
+        merge values firstTrie
 
     let private insideMap (f: 'K -> 'V) arr = arr |> List.map (f)
 
@@ -151,6 +137,15 @@ module Trie =
         folder (trieList.Length-1) init
     
     let trieEquals (trieOne: Trie<'V>) (trieTwo: Trie<'V>) : bool =
-        let seqOne = trieOne |> toSeq |> Seq.toArray
-        let seqTwo = trieTwo |> toSeq |> Seq.toArray
-        seqOne = seqTwo
+        let rec contain (values: 'V list list) eql =
+                match values with
+                | [] -> eql
+                | el::els ->
+                    let equal = contains el trieTwo
+                    contain els equal
+                    
+        if (((trieOne |> getBigSize) = (trieTwo |> getBigSize)) && ((trieOne |> getSizeAll) = (trieTwo |> getSizeAll))) then
+            let listOne = trieOne |> toSeq |> Seq.toList
+            contain listOne true
+        else
+            false

@@ -22,6 +22,10 @@ let main argv =
         |> Trie.insert ([ 5; 150; 625; 1255 ])
         
     printfn "%A" stringTrie
+    let twoStringTrie = stringTrie |> Trie.removeFromTrie 'D'
+    printfn "equals"
+    let nTrie = stringTrie |> Trie.trieEquals twoStringTrie
+    printfn "%A" nTrie
     
     printfn "use 2"
     let filterTrie = stringTrie |> Trie.filter (fun x -> x.Length = 6)
