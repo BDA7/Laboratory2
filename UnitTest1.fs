@@ -81,6 +81,16 @@ type TestClass() =
         assert (leftFoldBtreeIntsSub = rightFoldBtreeIntsSub)
         assert (leftFoldBtreeIntsSum = rightFoldBtreeIntsSum)
         assert (leftFoldBtreeIntsUm = rightFoldBtreeIntsUm)
+    
+    [<Test>]
+    member this.``Test equals`` () =
+        let oneTrie = btreeChars |> Trie.removeFromTrie 'b'
+        let twoTrie = btreeChars |> Trie.removeFromTrie 'a'
+        let threeTrie = btreeChars |> Trie.removeFromTrie 'b'
+        assert(Trie.trieEquals oneTrie oneTrie)
+        assert(Trie.trieEquals oneTrie threeTrie)
+        assert (not (Trie.trieEquals oneTrie twoTrie))
+        assert (not ((Trie.trieEquals btreeChars oneTrie) || (Trie.trieEquals btreeChars twoTrie) || (Trie.trieEquals btreeChars threeTrie)))
 
     
     [<Property>]
