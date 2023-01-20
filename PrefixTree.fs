@@ -56,7 +56,8 @@ module Trie =
     let filter (f:'K -> Trie<'K> -> bool) (trie: Trie<'K>) =
         let findLists =
             Map.filter f trie.Children
-        {empty with Children = findLists}
+        let newTrie = {empty with Children = findLists}
+        {newTrie with IsTerminal = true}
             
     let getSizeAll trie =
         let trieArr = toSeq trie |> Seq.toArray
@@ -85,7 +86,7 @@ module Trie =
     let removeFromTrie value (trie: Trie<'T>): Trie<'T>  =
         let el = Map.remove value trie.Children
         let newTrie = {empty with Children = el}
-        newTrie
+        {newTrie with IsTerminal = true}
             
 
     let addNewTrie firstTrie twoTrie =
@@ -104,7 +105,7 @@ module Trie =
         let newArr = toSeq trie |> Seq.toArray
         let updateArr = newArr |> Array.map (fun z -> insideMap f z)
         let newTrie = addAll updateArr (newArr.Length - 1) empty
-        newTrie
+        {newTrie with IsTerminal = true}
 
 
     let private insideLeftFold (f: 'T -> 'V -> 'T) (init: 'T) lst =
