@@ -28,7 +28,7 @@ let main argv =
     printfn "%A" nTrie
     
     printfn "use 2"
-    let filterTrie = stringTrie |> Trie.filter (fun x -> x.Length = 6)
+    let filterTrie = btreeInts |> Trie.filter (fun y _ -> y = 1)
     printfn "%A" filterTrie
     
     printfn "use 3"

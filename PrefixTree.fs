@@ -53,6 +53,11 @@ module Trie =
                     yield label :: child
         }
 
+    let filter (f:'K -> Trie<'K> -> bool) (trie: Trie<'K>) =
+        let findLists =
+            Map.filter f trie.Children
+        {empty with Children = findLists}
+            
     let getSizeAll trie =
         let trieArr = toSeq trie |> Seq.toArray
 
@@ -101,16 +106,6 @@ module Trie =
         let newTrie = addAll updateArr (newArr.Length - 1) empty
         newTrie
 
-    let filter (f: list<'K> -> bool) trie =
-        let filterElms = toSeq trie |> Seq.filter (f) |> Seq.toList
-        let rec createFilterTrie elements newTrie =
-            match elements with
-            | [] -> newTrie
-            | el::els ->
-                let updateTrie = newTrie |> insert el
-                createFilterTrie els updateTrie
-        createFilterTrie filterElms empty
-        
 
     let private insideLeftFold (f: 'T -> 'V -> 'T) (init: 'T) lst =
         let fold = List.fold (f) init lst

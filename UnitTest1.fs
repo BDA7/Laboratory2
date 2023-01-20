@@ -55,13 +55,12 @@ type TestClass() =
     [<Test>]
     member this.``Test Filter``() =
         let filterBtreeInts =
-            btreeInts |> Trie.filter (fun x -> x.Length = 3) |> Trie.getBigSize
+            btreeInts |> Trie.filter (fun x _ -> x = 1) |> Trie.getBigSize
 
         let filterBtreeChars =
-            btreeChars |> Trie.filter (fun x -> x.Length < 3) |> Trie.getBigSize
-
+            btreeChars |> Trie.filter (fun x _ -> x = 'a') |> Trie.getBigSize
         assert (filterBtreeInts = 2)
-        assert (filterBtreeChars = 1)
+        assert (filterBtreeChars = 3)
 
     [<Test>]
     member this.``Test Map``() =
